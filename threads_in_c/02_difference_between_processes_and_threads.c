@@ -3,7 +3,9 @@
 #include <unistd.h>
 #include <pthread.h>
 
-// Takeaway: Threads are sharing memory. Meaning, changing a variable in one thread. Also, changes the same variable in the other threads.
+/*
+Takeaway: Threads are sharing memory. Meaning, changing a variable in one thread. Also, changes the same variable in the other threads.
+*/
 
 int x = 2;
 

@@ -3,9 +3,11 @@
 #include <unistd.h>
 #include <pthread.h>
 
-// Takeaway: Threads doesnt always complete before the other one starts. Therefore, it is kinda random when the actual read/increament/write 
-// operations occour. (need mutex!)
-// NB: Race conditions can only occour in multi core processors!
+/*
+Takeaway: Threads doesnt always complete before the other one starts. Therefore, it is kinda random when the actual read/increament/write 
+operations occour. (need mutex!)
+NB: Race conditions can only occour in multi core processors!
+*/
 
 int mails = 0;
 

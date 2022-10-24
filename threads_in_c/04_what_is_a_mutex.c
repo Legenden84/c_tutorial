@@ -3,8 +3,10 @@
 #include <unistd.h>
 #include <pthread.h>
 
-// Takeaway: Use mutex to lock/unlock critical sections. That you want one thread to run, before another thread can run. 
-// Thus, getting rid of race conditions.
+/*
+Takeaway: Use mutex to lock/unlock critical sections. That you want one thread to run, before another thread can run. 
+Thus, getting rid of race conditions.
+*/
 
 int mails = 0;
 pthread_mutex_t mutex;
