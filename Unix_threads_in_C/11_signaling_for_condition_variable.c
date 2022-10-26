@@ -5,7 +5,8 @@
 #include <errno.h>
 
 /*
-
+    pthread_cond_signal() only awakens 1 thread (kinda random which one). 
+    Use pthread_cond_broadcast() instead to "broadcast" to all ofthe threads.
 */
 
 pthread_mutex_t mutex_fuel;
@@ -16,10 +17,10 @@ int fuel = 0;
 void* gas_station_filling(void* arg) {
     for (int i = 0; i < 5; i++) {
         pthread_mutex_lock(&mutex_fuel);
-        fuel += 15;
+        fuel += 60;
         printf("Gas station fuel amount: %d\n", fuel);
         pthread_mutex_unlock(&mutex_fuel);
-        pthread_cond_signal(&cond_fuel);
+        pthread_cond_broadcast(&cond_fuel);
         sleep(1);
     }
 }
@@ -30,7 +31,7 @@ void* car(void* arg) {
         printf("No fuel, waiting...\n");
         pthread_cond_wait(&cond_fuel, &mutex_fuel);
     }
-    fuel -= 40;
+    fuel -= 30;
     printf("Car got fuel. Fuel left in gas station: %d\n", fuel);
     pthread_mutex_unlock(&mutex_fuel);
 }
@@ -38,9 +39,9 @@ void* car(void* arg) {
 int main(int argc, char* argv[]) {
     pthread_mutex_init(&mutex_fuel, NULL);
     pthread_cond_init(&cond_fuel, NULL);
-    pthread_t thread[2];
-    for (int i = 0; i < 2; i++) {
-        if (i == 1) {
+    pthread_t thread[6];
+    for (int i = 0; i < 6; i++) {
+        if (i == 4 || i == 5) {
             if (pthread_create(&thread[i], NULL, &gas_station_filling, NULL) != 0) {
                 perror("Failed to create thread");
             }
@@ -51,7 +52,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 6; i++) {
         if (pthread_join(thread[i], NULL) != 0) {
             perror("Failed to join thread");
         }
